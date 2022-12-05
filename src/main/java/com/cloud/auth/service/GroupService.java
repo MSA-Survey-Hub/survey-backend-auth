@@ -20,6 +20,7 @@ public interface GroupService {
                 .groupDescription(group.getGroupDescription())
                 .groupCnt(group.getGroupCnt())
                 .prtcpList(new ArrayList<>())
+                .regId(group.getUser().getRegId())
                 .regDt(group.getRegDt())
                 .modId(group.getModId())
                 .modDt(group.getModDt())
@@ -56,6 +57,9 @@ public interface GroupService {
     // 그룹 생성
     void insertGroup(GroupDTO groupDTO);
 
+    // 그룹 검색 (개설자 기준)
+    Group findByGroupName(String groupName);
 
-
+    // 그룹 검색 (그룹 이름 기준)
+    Group findByUserId(String userId);
 }

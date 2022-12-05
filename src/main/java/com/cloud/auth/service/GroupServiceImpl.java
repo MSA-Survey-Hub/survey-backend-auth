@@ -36,10 +36,10 @@ public class GroupServiceImpl implements GroupService {
         Pageable pageable = requestDTO.getPageable(Sort.by("groupId").descending());
         Page<Group> groupListPage = groupRepository.findExistGroup(pageable);
 
-        Function<Group, GroupDTO> fn = ((group)->{
+        Function<Group, GroupDTO> fn = ((group) -> {
             List<User> prtcpList = userGroupRepository.userList(group.getGroupId());
             AtomicReference<String> participatedFlag = new AtomicReference<>("N"); // 참여 여부
-            if(prtcpList.size() > 0 ) {
+            if (prtcpList.size() > 0) {
                 prtcpList.forEach((prtcp) -> {
                     if (prtcp.getUserId().equals(userId)) {
                         participatedFlag.set("Y");
@@ -48,7 +48,7 @@ public class GroupServiceImpl implements GroupService {
             }
 
             String isParticipated = participatedFlag.get();
-            String isCreated = userId == group.getUser().getUserId() ? "Y": "N";
+            String isCreated = userId.equals(group.getUser().getUserId()) ? "Y" : "N";
 
             return entityToDTO(group, prtcpList, isParticipated, isCreated);
         });
@@ -60,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Integer deleteGroup(Integer groupId) {
         // 값이 없으면 delete, return 1
-        if(userGroupRepository.userList(groupId).isEmpty()) {
+        if (userGroupRepository.userList(groupId).isEmpty()) {
             groupRepository.updateGroupDelY(groupId);
             return 1;
         }
@@ -88,5 +88,18 @@ public class GroupServiceImpl implements GroupService {
         String isCreated = null;
         GroupDTO groupDTO = entityToDTO(group, userList, isParticipated, isCreated);
         return groupDTO;
+    }
+
+    // 그룹 검색 (그룹 이름 기준)
+    @Override
+    public Group findByUserId(String regId) {
+        Group group = groupRepository.findByUserId(regId);
+        return group;
+    }
+
+    @Override
+    public Group findByGroupName(String groupName) {
+        Group group = groupRepository.findByGroupName(groupName);
+        return group;
     }
 }
