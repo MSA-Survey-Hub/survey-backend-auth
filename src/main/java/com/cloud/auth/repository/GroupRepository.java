@@ -28,6 +28,11 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
     @Query(value = "SELECT g FROM Group g WHERE (g.user.userId = :userId) AND (g.delYn = 'N')")
     Group findByUserId(String userId);
 
+
+    // 해당 groupName의 그룹 정보 조회
+    @Query(value = "SELECT g FROM Group g WHERE (g.groupName = :groupName) AND (g.delYn = 'N')")
+    Group findByGroupName(String groupName);
+
     // 그룹 참여자 추가
     @Modifying
     @Transactional
