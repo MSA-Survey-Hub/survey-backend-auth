@@ -79,5 +79,16 @@ public class GroupController {
         return group;
     }
 
+    @GetMapping("/searchId/{regId}")
+    public Group findByUserId(@PathVariable String regId) {
+        Group group = groupService.findByUserId(regId);
+        return group;
+    }
+
+    @GetMapping("/searchName/{groupName}")
+    public Group findByGroupName(@PathVariable String groupName) {
+        Group group = groupService.findByGroupName(groupName);
+        return group;
+    }
 }
 
