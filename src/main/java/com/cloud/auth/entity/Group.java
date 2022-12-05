@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 
 import javax.persistence.*;
@@ -15,9 +17,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Data
+@DynamicInsert
 @Table(name = "`group`")
 public class Group {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id", nullable = false)
     private Integer groupId;
 
@@ -31,6 +36,7 @@ public class Group {
     private String groupDescription;
 
     @Column(name = "group_cnt", nullable = false)
+    @ColumnDefault("1")
     private Integer groupCnt;
 
     @ManyToOne
@@ -49,6 +55,7 @@ public class Group {
     private LocalDateTime modDt;
 
     @Column(name = "del_yn", nullable = false)
+    @ColumnDefault("'N'")
     @Enumerated(EnumType.STRING)
     private DelYn delYn;
 }
