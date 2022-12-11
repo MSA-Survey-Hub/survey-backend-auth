@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="v1/group")
@@ -35,7 +36,19 @@ public class GroupController {
         return new ResponseEntity<>(groupList, HttpStatus.OK);
     }
 
-    // 그룹 삭제 : DB 값 Y로 변경
+
+    @GetMapping("/allList")
+    public ResponseEntity<List<GroupDTO>> getAllGroupList(Principal principal) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
+        String userId = token.getTokenAttributes().get("preferred_username").toString();
+
+        List<GroupDTO> groupList = groupService.getAllGroupList(userId);
+
+        return new ResponseEntity<>(groupList, HttpStatus.OK);
+    }
+
+
+    // 그룹 삭제
     @PostMapping("/delete")
     public ResponseEntity<String> delGroup(@RequestParam(value = "groupId") Integer groupId) {
         System.out.println("groupId = " + groupId);

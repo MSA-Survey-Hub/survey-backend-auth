@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 
 public interface GroupRepository extends JpaRepository<Group, Integer> {
 
@@ -18,6 +21,10 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
     @Query("select g from Group g where g.delYn='N'")
     Page<Group> findExistGroup(Pageable pageable);
 
+    // 생성 그룹 리스트 조회
+     @Query("select g from Group g where g.regId=:regId AND g.delYn='N'")
+    List<Group> findByRegId(@Param("regId") String regId);
+
     // 그룹 삭제 처리
     @Modifying
     @Transactional
@@ -25,7 +32,7 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
     void updateGroupDelY(Integer groupId);
 
     // 해당 UserId의 그룹 정보 조회
-    @Query(value = "SELECT g FROM Group g WHERE (g.user.userId = :userId) AND (g.delYn = 'N')")
+    @Query(value = "SELECT g FROM Group g WHERE (g.regId = :userId) AND (g.delYn = 'N')")
     Group findByUserId(String userId);
 
 

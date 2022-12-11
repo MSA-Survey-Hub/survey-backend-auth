@@ -20,7 +20,7 @@ public interface GroupService {
                 .groupDescription(group.getGroupDescription())
                 .groupCnt(group.getGroupCnt())
                 .prtcpList(new ArrayList<>())
-                .regId(group.getUser().getRegId())
+                .regId(group.getRegId())
                 .regDt(group.getRegDt())
                 .modId(group.getModId())
                 .modDt(group.getModDt())
@@ -40,7 +40,7 @@ public interface GroupService {
                 .groupCode(dto.getGroupCode())
                 .groupDescription(dto.getGroupDescription())
                 .groupCnt(dto.getGroupCnt())
-                .user(user)
+                .regId(dto.getRegId())
                 .regDt(dto.getRegDt())
                 .modId(dto.getModId())
                 .modDt(dto.getModDt())
@@ -50,6 +50,8 @@ public interface GroupService {
     }
 
     PageResultDTO<GroupDTO, Group> getGroupList(String userId, PageRequestDTO requestDTO);
+
+    List<GroupDTO> getAllGroupList(String userId);
 
     // 그룹 삭제
     Integer deleteGroup(Integer groupId);

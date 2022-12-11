@@ -39,9 +39,8 @@ public class Group {
     @ColumnDefault("1")
     private Integer groupCnt;
 
-    @ManyToOne
     @JoinColumn(name = "reg_id", nullable = false)
-    private User user;
+    private String regId;
 
     @Column(name = "reg_dt", nullable = false, length = 20)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")

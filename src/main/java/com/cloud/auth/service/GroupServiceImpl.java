@@ -9,11 +9,14 @@ import com.cloud.auth.repository.GroupRepository;
 import com.cloud.auth.repository.UserGroupRepository;
 import com.cloud.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -28,6 +31,8 @@ public class GroupServiceImpl implements GroupService {
 
     private final UserRepository userRepository;
 
+    @Autowired
+    private final ModelMapper mapper;
 
     // 그룹 리스트 조회
     @Override
@@ -48,13 +53,29 @@ public class GroupServiceImpl implements GroupService {
             }
 
             String isParticipated = participatedFlag.get();
-            String isCreated = userId.equals(group.getUser().getUserId()) ? "Y" : "N";
+            String isCreated = userId.equals(group.getRegId()) ? "Y" : "N";
 
             return entityToDTO(group, prtcpList, isParticipated, isCreated);
         });
 
         return new PageResultDTO<>(groupListPage, fn);
     }
+
+
+    @Override
+    public List<GroupDTO> getAllGroupList(String userId) {
+        List<GroupDTO> groupDTOList = new ArrayList<>();
+        List<Group> groupList = groupRepository.findByRegId(userId);
+
+        groupList.forEach(group -> {
+            GroupDTO groupDTO  = mapper.map(group, GroupDTO.class);
+            groupDTO.setPrtcpList(userGroupRepository.userList(group.getGroupId()));
+            groupDTOList.add(groupDTO);
+        });
+
+        return groupDTOList;
+    }
+
 
     // 그룹 삭제
     @Override
