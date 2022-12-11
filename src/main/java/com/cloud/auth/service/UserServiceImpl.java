@@ -22,13 +22,6 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private final ModelMapper mapper;
 
-    private final KafkaProducer kafkaProducer;
-
-    @Override
-    public String doKafkaConnTest(String message) {
-        kafkaProducer.sendMessage("test", message);
-        return "success";
-    }
 
     public UserDTO getUserDetailInfo(String UserId) {
         User user = userRepository.findByUserId(UserId);
@@ -41,6 +34,24 @@ public class UserServiceImpl implements UserService{
         list.forEach(user -> {
             userList.add(getUserDetailInfo((String) user.get("reg_id")));
         });
+        return userList;
+    }
+
+    @Override
+    public List<UserDTO> getAllUserList(String type, String keyword) {
+
+        List<UserDTO> userList = new ArrayList<>();
+        if (type.equals("Name")){
+            List<User> list = userRepository.findByName(keyword);
+            list.forEach(user -> {
+                userList.add(mapper.map(user, UserDTO.class));
+            });
+        }else{
+            List<User> list = userRepository.findByMailAddr(keyword);
+            list.forEach(user -> {
+                userList.add(mapper.map(user, UserDTO.class));
+            });
+        }
         return userList;
     }
 }
