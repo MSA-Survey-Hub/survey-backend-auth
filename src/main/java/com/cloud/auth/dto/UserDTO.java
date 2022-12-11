@@ -4,6 +4,7 @@ import com.cloud.auth.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,8 @@ public class UserDTO {
     private String phone;
     private String mailAddr;
     private UserRole userRole;
+    private MultipartFile userImage;
+
     private String userPwd;
     private int status;
     private String statusInfo;

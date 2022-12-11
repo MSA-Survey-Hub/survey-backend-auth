@@ -2,12 +2,14 @@ package com.cloud.auth.service;
 
 import com.cloud.auth.dto.UserDTO;
 import com.cloud.auth.entity.User;
+import com.cloud.auth.openfeign.CommonServiceClient;
 import com.cloud.auth.repository.UserRepository;
 import com.cloud.auth.service.kafka.producer.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private final ModelMapper mapper;
 
+    private final CommonServiceClient commonServiceClient;
 
     public UserDTO getUserDetailInfo(String UserId) {
         User user = userRepository.findByUserId(UserId);
@@ -53,5 +56,14 @@ public class UserServiceImpl implements UserService{
             });
         }
         return userList;
+    }
+
+    @Override
+    public void registerUser(UserDTO userDTO) {
+        System.out.println("userDTO = " + userDTO);
+        String imageUrl = commonServiceClient.uploadFile(userDTO.getUserImage());
+        System.out.println("imageUrl = " + imageUrl);
+        User user = dtoToEntity(userDTO, imageUrl);
+        userRepository.save(user);
     }
 }

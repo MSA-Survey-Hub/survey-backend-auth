@@ -1,59 +1,87 @@
 package com.cloud.auth.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Data
-@Table(catalog = "user_db")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
-
-        public enum AcceptYn { Y, N }
-
         @Id
-        @Column(name = "user_id")
+        @Comment("사용자 아이디")
+        @Column(name = "user_id", nullable = false)
         private String userId;
 
-        @Column(name="name", nullable = false, length = 30)
+        @Comment("사용자 이름")
+        @Column(name="name", nullable = false)
         private String name;
 
-        @Column(name="job", length = 30)
+        @Comment("사용자 직업")
+        @Column(name="job", nullable = false)
         private String job;
 
+        @Comment("사용자 나이")
         @Column(name = "age", nullable = false)
         private int age;
 
+        @Comment("사용자 성별")
         @Column(name="gender", nullable = false)
         private String gender;
 
-        @Column(name = "phone", length = 11)
+        @Comment("사용자 전화번호")
+        @Column(name = "phone", nullable = false)
         private String phone;
 
-        @Column(name = "mail_addr", length = 30, nullable = false)
+        @Comment("사용자 이메일 주소")
+        @Column(name = "mail_addr", nullable = false)
         private String mailAddr;
 
+        @Comment("사용자 프로필 사진")
+        @Column(name = "image_url", nullable = false)
+        private String imageUrl;
+
+        @Comment("사용자 이메일 수신동의 여부")
+        @ColumnDefault("true")
         @Column(name = "is_mail_accept", nullable = false)
-        @Enumerated(EnumType.STRING)
-        private AcceptYn mailAcceptYn;
+        private boolean mailAcceptYn;
 
+        @Comment("사용자 전화번호 수신동의 여부")
+        @ColumnDefault("true")
         @Column(name = "is_phone_accept", nullable = false)
-        @Enumerated(EnumType.STRING)
-        private AcceptYn phoneAcceptYn;
+        private boolean phoneAcceptYn;
 
+        @Comment("사용자 권한")
         @Column(name = "role", nullable = false)
         @Enumerated(EnumType.STRING)
         private UserRole userRole;
 
-        @Column(name = "reg_id", nullable = false, length = 20)
+        @Comment("등록자")
+        @Column(name = "reg_id", nullable = false)
         private String regId;
 
+        @CreatedDate
+        @Comment("등록일자")
         @Column(name = "reg_dt", nullable = false)
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime regDt;
 
+        @ColumnDefault("false")
+        @Comment("사용자 탈퇴 여부")
         @Column(name = "use_yn", nullable = false)
-        private String useYn;
+        private boolean useYn;
 
 
 }
