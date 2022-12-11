@@ -16,9 +16,6 @@ public class User {
         @Column(name = "user_id")
         private String userId;
 
-        @Column(name = "user_pwd", nullable = false)
-        private String userPwd;
-
         @Column(name="name", nullable = false, length = 30)
         private String name;
 

@@ -17,7 +17,6 @@ public class UserDTO {
     private String phone;
     private String mailAddr;
     private UserRole userRole;
-
     private String userPwd;
     private int status;
     private String statusInfo;
