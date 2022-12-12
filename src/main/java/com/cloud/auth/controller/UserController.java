@@ -51,4 +51,15 @@ public class UserController {
         }
     }
 
+    @PostMapping("/search")
+    public List<UserDTO> searchUser(
+            @RequestParam("searchOption") String searchOption,
+            @RequestParam("searchContent") String searchContent) {
+        if (searchOption.equals("userId")) {
+            return userService.searchUserbyUserId(searchContent);
+        } else if (searchOption.equals("name")) {
+            return userService.searchUserbyName(searchContent);
+        } return null;
+    }
+
 }

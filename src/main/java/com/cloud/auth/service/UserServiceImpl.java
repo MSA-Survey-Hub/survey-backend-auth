@@ -99,4 +99,26 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(user);
     }
+
+    @Override
+    public List<UserDTO> searchUserbyUserId(String searchContent) {
+        List<User> userList = userRepository.searchUserbyUserId(searchContent);
+        List<UserDTO> userDTOList = new ArrayList<>();
+        userList.forEach(user -> {
+            UserDTO userDTO = entityToDTO(user);
+            userDTOList.add(userDTO);
+        });
+        return userDTOList;
+    }
+
+    @Override
+    public List<UserDTO> searchUserbyName(String searchContent) {
+        List<User> userList = userRepository.searchUserbyName(searchContent);
+        List<UserDTO> userDTOList = new ArrayList<>();
+        userList.forEach(user -> {
+            UserDTO userDTO = entityToDTO(user);
+            userDTOList.add(userDTO);
+        });
+        return userDTOList;
+    }
 }

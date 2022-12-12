@@ -20,6 +20,9 @@ public interface UserService {
     void registerUser(UserDTO userDTO) throws IOException;
     void modifyUser(UserDTO userDTO) throws IOException;
 
+    List<UserDTO> searchUserbyUserId(String searchContent);
+    List<UserDTO> searchUserbyName(String searchContent);
+
     default User dtoToEntity(UserDTO dto, String imageUrl) {
         User user = User.builder()
                 .userId(dto.getUserId())
@@ -35,5 +38,20 @@ public interface UserService {
                 .userRole(dto.getUserRole())
                 .build();
         return user;
+    }
+
+    default UserDTO entityToDTO(User user) {
+        UserDTO userDTO = UserDTO.builder()
+                .userId(user.getUserId())
+                .name(user.getName())
+                .job(user.getJob())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .phone(user.getPhone())
+                .mailAddr(user.getMailAddr())
+                .userRole(user.getUserRole())
+                .imageUrl(user.getImageUrl())
+                .build();
+        return userDTO;
     }
 }

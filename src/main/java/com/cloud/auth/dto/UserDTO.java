@@ -2,10 +2,12 @@ package com.cloud.auth.dto;
 
 import com.cloud.auth.entity.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
