@@ -1,6 +1,6 @@
 package com.cloud.auth.dto;
 
-import com.cloud.auth.entity.DelYn;
+//import com.cloud.auth.entity.DelYn;
 import com.cloud.auth.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class GroupRegDTO {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modDt;
 
-    private DelYn delYn;
+//    private DelYn delYn;
 
     private List<User> prtcpList;
 }
