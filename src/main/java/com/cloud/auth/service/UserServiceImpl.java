@@ -66,12 +66,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void registerUser(UserDTO userDTO) throws IOException {
-        System.out.println("userDTO = " + userDTO);
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setOriginalName(userDTO.getUserImage().getOriginalFilename());
-        fileDTO.setFileBytes(userDTO.getUserImage().getBytes());
-        String imageUrl = commonServiceClient.uploadFile(fileDTO);
-        System.out.println("imageUrl = " + imageUrl);
+        String imageUrl = "";
+        if (userDTO.getUserImage()!=null) {
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setOriginalName(userDTO.getUserImage().getOriginalFilename());
+            fileDTO.setFileBytes(userDTO.getUserImage().getBytes());
+            imageUrl = commonServiceClient.uploadFile(fileDTO, "user");
+            System.out.println("imageUrl = " + imageUrl);
+
+        }
         User user = dtoToEntity(userDTO, imageUrl);
         userRepository.save(user);
     }
@@ -93,7 +96,7 @@ public class UserServiceImpl implements UserService{
             FileDTO fileDTO = new FileDTO();
             fileDTO.setOriginalName(userDTO.getUserImage().getOriginalFilename());
             fileDTO.setFileBytes(userDTO.getUserImage().getBytes());
-            String imageUrl = commonServiceClient.uploadFile(fileDTO);
+            String imageUrl = commonServiceClient.uploadFile(fileDTO, "user");
             user.changeImageUrl(imageUrl);
         }
 
