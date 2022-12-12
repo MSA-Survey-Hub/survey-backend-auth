@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import javax.persistence.*;
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @DynamicInsert
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "`group`")
 public class Group {
 
@@ -42,6 +46,7 @@ public class Group {
     @JoinColumn(name = "reg_id", nullable = false)
     private String regId;
 
+    @CreatedDate
     @Column(name = "reg_dt", nullable = false, length = 20)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime regDt;
@@ -49,6 +54,7 @@ public class Group {
     @Column(name = "mod_id", length = 20)
     private String modId;
 
+    @LastModifiedDate
     @Column(name = "mod_dt")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modDt;
@@ -57,4 +63,7 @@ public class Group {
     @ColumnDefault("'N'")
     @Enumerated(EnumType.STRING)
     private DelYn delYn;
+
+    @Column(name = "group_image_url")
+    private String groupImageUrl;
 }

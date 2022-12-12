@@ -2,9 +2,11 @@ package com.cloud.auth.service;
 import com.cloud.auth.dto.GroupDTO;
 import com.cloud.auth.dto.PageRequestDTO;
 import com.cloud.auth.dto.PageResultDTO;
+import com.cloud.auth.entity.DelYn;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.entity.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public interface GroupService {
                 .modDt(group.getModDt())
                 .isParticipated(isParticipated)
                 .isCreated(isCreated)
+                .groupImageUrl(group.getGroupImageUrl())
                 .build();
         userList.forEach(user -> {
             groupDTO.addPrtcpList(user);
@@ -33,7 +36,7 @@ public interface GroupService {
         return groupDTO;
     }
 
-    default Group dtoToEntity(GroupDTO dto, User user) {
+    default Group dtoToEntity(GroupDTO dto) {
         Group group = Group.builder()
                 .groupId(dto.getGroupId())
                 .groupName(dto.getGroupName())
@@ -41,10 +44,8 @@ public interface GroupService {
                 .groupDescription(dto.getGroupDescription())
                 .groupCnt(dto.getGroupCnt())
                 .regId(dto.getRegId())
-                .regDt(dto.getRegDt())
-                .modId(dto.getModId())
-                .modDt(dto.getModDt())
                 .delYn(dto.getDelYn())
+                .groupImageUrl(dto.getGroupImageUrl())
                 .build();
         return group;
     }
@@ -57,7 +58,7 @@ public interface GroupService {
     Integer deleteGroup(Integer groupId);
 
     // 그룹 생성
-    void insertGroup(GroupDTO groupDTO);
+    void insertGroup(GroupDTO groupDTO) throws IOException;
 
     // 그룹 검색 (개설자 기준)
     Group findByGroupName(String groupName);
