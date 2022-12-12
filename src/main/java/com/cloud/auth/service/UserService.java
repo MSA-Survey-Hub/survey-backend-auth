@@ -18,6 +18,7 @@ public interface UserService {
     List<UserDTO> getAllUserList(String type, String keyword); // 사용자 정보 검색 리스트 조회
 
     void registerUser(UserDTO userDTO) throws IOException;
+    void modifyUser(UserDTO userDTO) throws IOException;
 
     default User dtoToEntity(UserDTO dto, String imageUrl) {
         User user = User.builder()
@@ -32,7 +33,6 @@ public interface UserService {
                 .mailAcceptYn(true)
                 .phoneAcceptYn(true)
                 .userRole(dto.getUserRole())
-                .regId(dto.getUserId())
                 .build();
         return user;
     }

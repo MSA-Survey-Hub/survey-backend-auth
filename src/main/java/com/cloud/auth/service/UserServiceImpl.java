@@ -75,4 +75,28 @@ public class UserServiceImpl implements UserService{
         User user = dtoToEntity(userDTO, imageUrl);
         userRepository.save(user);
     }
+
+    @Override
+    public void modifyUser(UserDTO userDTO) throws IOException {
+        User user = userRepository.findByUserId(userDTO.getUserId());
+
+        // user info 변경하기
+        user.changeMailAddr(userDTO.getMailAddr());
+        user.changeName(userDTO.getName());
+        user.changeAge(userDTO.getAge());
+        user.changeGender(userDTO.getGender());
+        user.changeJob(userDTO.getJob());
+        user.changePhone(userDTO.getPhone());
+
+        // user image 변경하기
+        if (userDTO.getUserImage() != null) {
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setOriginalName(userDTO.getUserImage().getOriginalFilename());
+            fileDTO.setFileBytes(userDTO.getUserImage().getBytes());
+            String imageUrl = commonServiceClient.uploadFile(fileDTO);
+            user.changeImageUrl(imageUrl);
+        }
+
+        userRepository.save(user);
+    }
 }

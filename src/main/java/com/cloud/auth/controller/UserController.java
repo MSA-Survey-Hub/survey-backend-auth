@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,16 @@ public class UserController {
     @RequestMapping(value = "/allUserList", method = RequestMethod.GET)
     public ResponseEntity<List<UserDTO>> getAllUserList(@RequestParam(value = "type") String type, @RequestParam(value = "keyword") String keyword) {
         return new ResponseEntity<>(userService.getAllUserList(type, keyword), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/modify")
+    public ResponseEntity<String> modifyUser(UserDTO userDTO) throws IOException {
+        try {
+            userService.modifyUser(userDTO);
+            return new ResponseEntity<>("회원 정보를 수정하였습니다.", HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

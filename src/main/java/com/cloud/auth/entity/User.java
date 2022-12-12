@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -68,20 +69,53 @@ public class User {
         @Enumerated(EnumType.STRING)
         private UserRole userRole;
 
-        @Comment("등록자")
-        @Column(name = "reg_id", nullable = false)
-        private String regId;
-
         @CreatedDate
         @Comment("등록일자")
         @Column(name = "reg_dt", nullable = false)
         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime regDt;
 
+        @LastModifiedDate
+        @Comment("수정일자")
+        @Column(name = "mod_dt")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime modDt;
+
         @ColumnDefault("false")
         @Comment("사용자 탈퇴 여부")
         @Column(name = "use_yn", nullable = false)
         private boolean useYn;
+
+        public void changeMailAddr(String mailAddr) {
+                this.mailAddr = mailAddr;
+        }
+
+
+        public void changeName(String name) {
+                this.name = name;
+        }
+
+        public void changeJob(String job) {
+                this.job = job;
+        }
+
+        public void changeAge(int age) {
+                this.age = age;
+        }
+
+        public void changeGender(String gender) {
+                this.gender = gender;
+        }
+
+        public void changePhone(String phone) {
+                this.phone = phone;
+        }
+
+        public void changeImageUrl(String imageUrl) {
+                this.imageUrl = imageUrl;
+        }
+
+
 
 
 }
