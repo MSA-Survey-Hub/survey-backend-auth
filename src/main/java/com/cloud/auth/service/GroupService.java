@@ -58,7 +58,7 @@ public interface GroupService {
     Integer deleteGroup(Integer groupId);
 
     // 그룹 생성
-    void insertGroup(GroupDTO groupDTO) throws IOException;
+    Integer insertGroup(GroupDTO groupDTO) throws IOException;
 
     // 그룹 검색 (개설자 기준)
     Group findByGroupName(String groupName);

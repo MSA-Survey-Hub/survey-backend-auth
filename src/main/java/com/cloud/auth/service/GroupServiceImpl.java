@@ -96,7 +96,7 @@ public class GroupServiceImpl implements GroupService {
 
     // 그룹 생성
     @Override
-    public void insertGroup(GroupDTO groupDTO) throws IOException {
+    public Integer insertGroup(GroupDTO groupDTO) throws IOException {
         String imageUrl = "";
         if (groupDTO.getGroupImage()!=null) {
             FileDTO fileDTO = new FileDTO();
@@ -109,7 +109,8 @@ public class GroupServiceImpl implements GroupService {
         groupDTO.setDelYn(DelYn.N);
         User user = userRepository.findByUserId(groupDTO.getRegId());
         Group group = dtoToEntity(groupDTO);
-        groupRepository.save(group);
+        Group save = groupRepository.save(group);
+        return save.getGroupId();
     }
 
 

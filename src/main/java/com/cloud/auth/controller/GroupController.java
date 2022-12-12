@@ -66,9 +66,23 @@ public class GroupController {
     // 그룹 생성
     @PostMapping("/reg")
     public ResponseEntity<String> regGroup(GroupDTO groupDTO) throws IOException {
-        System.out.println("groupDTO = " + groupDTO);
-        groupService.insertGroup(groupDTO);
-        return new ResponseEntity<>("성공했습니다", HttpStatus.OK);
+        try {
+            // 그룹 등록하기
+            Integer groupId = groupService.insertGroup(groupDTO);
+
+            // 그룹 참여자 목록 등록하기(그룹 생성자)
+            userGroupService.participateGroup(groupDTO.getRegId(), groupId);
+
+            // 그룹 참여자 목록 등록하기(그룹 참여자)
+            groupDTO.getGroupUserList().forEach((userId) -> {
+                userGroupService.participateGroup(userId, groupId);
+            });
+            return new ResponseEntity<>("그룹 생성에 성공했습니다", HttpStatus.CREATED);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>("그룹 생성에 실패했습니다", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     // 그룹 참여(user-group table에 값 추가)
