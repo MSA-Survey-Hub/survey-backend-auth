@@ -1,10 +1,13 @@
 package com.cloud.auth.service;
 
+import com.cloud.auth.dto.FileDTO;
 import com.cloud.auth.dto.GroupDTO;
 import com.cloud.auth.dto.PageRequestDTO;
 import com.cloud.auth.dto.PageResultDTO;
+import com.cloud.auth.entity.DelYn;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.entity.User;
+import com.cloud.auth.openfeign.CommonServiceClient;
 import com.cloud.auth.repository.GroupRepository;
 import com.cloud.auth.repository.UserGroupRepository;
 import com.cloud.auth.repository.UserRepository;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,10 +30,9 @@ import java.util.function.Function;
 public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
-
     private final UserGroupRepository userGroupRepository;
-
     private final UserRepository userRepository;
+    private final CommonServiceClient commonServiceClient;
 
     @Autowired
     private final ModelMapper mapper;
@@ -93,9 +96,19 @@ public class GroupServiceImpl implements GroupService {
 
     // 그룹 생성
     @Override
-    public void insertGroup(GroupDTO groupDTO) {
+    public void insertGroup(GroupDTO groupDTO) throws IOException {
+        String imageUrl = "";
+        if (groupDTO.getGroupImage()!=null) {
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setOriginalName(groupDTO.getGroupImage().getOriginalFilename());
+            fileDTO.setFileBytes(groupDTO.getGroupImage().getBytes());
+            imageUrl = commonServiceClient.uploadFile(fileDTO, "group");
+            System.out.println("imageUrl = " + imageUrl);
+        }
+        groupDTO.setGroupImageUrl(imageUrl);
+        groupDTO.setDelYn(DelYn.N);
         User user = userRepository.findByUserId(groupDTO.getRegId());
-        Group group = dtoToEntity(groupDTO, user);
+        Group group = dtoToEntity(groupDTO);
         groupRepository.save(group);
     }
 

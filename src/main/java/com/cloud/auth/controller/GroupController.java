@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -64,7 +65,8 @@ public class GroupController {
 
     // 그룹 생성
     @PostMapping("/reg")
-    public ResponseEntity<String> regGroup(@RequestBody GroupDTO groupDTO) {
+    public ResponseEntity<String> regGroup(GroupDTO groupDTO) throws IOException {
+        System.out.println("groupDTO = " + groupDTO);
         groupService.insertGroup(groupDTO);
         return new ResponseEntity<>("성공했습니다", HttpStatus.OK);
     }
