@@ -1,17 +1,23 @@
 package com.cloud.auth.service;
 
+import com.cloud.auth.dto.FileDTO;
 import com.cloud.auth.dto.UserDTO;
 import com.cloud.auth.entity.User;
 import com.cloud.auth.openfeign.CommonServiceClient;
 import com.cloud.auth.repository.UserRepository;
 import com.cloud.auth.service.kafka.producer.KafkaProducer;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.protocol.types.Field;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.ws.rs.core.Form;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,9 +65,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void registerUser(UserDTO userDTO) {
+    public void registerUser(UserDTO userDTO) throws IOException {
         System.out.println("userDTO = " + userDTO);
-        String imageUrl = commonServiceClient.uploadFile(userDTO.getUserImage());
+        FileDTO fileDTO = new FileDTO();
+        fileDTO.setOriginalName(userDTO.getUserImage().getOriginalFilename());
+        fileDTO.setFileBytes(userDTO.getUserImage().getBytes());
+        String imageUrl = commonServiceClient.uploadFile(fileDTO);
         System.out.println("imageUrl = " + imageUrl);
         User user = dtoToEntity(userDTO, imageUrl);
         userRepository.save(user);

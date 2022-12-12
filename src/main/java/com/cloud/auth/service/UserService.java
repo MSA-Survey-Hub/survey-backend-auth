@@ -4,6 +4,7 @@ import com.cloud.auth.dto.UserDTO;
 import com.cloud.auth.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public interface UserService {
 
     List<UserDTO> getAllUserList(String type, String keyword); // 사용자 정보 검색 리스트 조회
 
-    void registerUser(UserDTO userDTO);
+    void registerUser(UserDTO userDTO) throws IOException;
 
     default User dtoToEntity(UserDTO dto, String imageUrl) {
         User user = User.builder()

@@ -19,7 +19,7 @@ public class UserDTO {
     private String mailAddr;
     private UserRole userRole;
     private MultipartFile userImage;
-
+    private String imageUrl;
     private String userPwd;
     private int status;
     private String statusInfo;
