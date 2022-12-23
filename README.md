@@ -1,4 +1,4 @@
-#Auth Service
+# Auth Service
 |Method|API|Description|
 |---|---|---|
 |POST|/auth-service/v1/auth/signup|회원가입|
