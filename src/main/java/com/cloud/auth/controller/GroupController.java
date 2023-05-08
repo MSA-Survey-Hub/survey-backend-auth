@@ -52,8 +52,9 @@ public class GroupController {
     // 그룹 삭제
     @PostMapping("/delete")
     public ResponseEntity<String> delGroup(@RequestParam(value = "groupId") Integer groupId) {
-        System.out.println("groupId = " + groupId);
         Integer deleteGroup = groupService.deleteGroup(groupId);
+
+
         if(deleteGroup == 1) {
             return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
         }
@@ -67,6 +68,7 @@ public class GroupController {
     @PostMapping("/reg")
     public ResponseEntity<String> regGroup(GroupDTO groupDTO) throws IOException {
         try {
+            System.out.print(groupDTO);
             // 그룹 등록하기
             Integer groupId = groupService.insertGroup(groupDTO);
 
@@ -75,6 +77,7 @@ public class GroupController {
 
             // 그룹 참여자 목록 등록하기(그룹 참여자)
             groupDTO.getGroupUserList().forEach((userId) -> {
+                System.out.printf("userId: %s",userId);
                 userGroupService.participateGroup(userId, groupId);
             });
             return new ResponseEntity<>("그룹 생성에 성공했습니다", HttpStatus.CREATED);
