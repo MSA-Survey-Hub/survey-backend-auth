@@ -72,8 +72,6 @@ public class UserServiceImpl implements UserService{
             fileDTO.setOriginalName(userDTO.getUserImage().getOriginalFilename());
             fileDTO.setFileBytes(userDTO.getUserImage().getBytes());
             imageUrl = commonServiceClient.uploadFile(fileDTO, "user");
-            System.out.println("imageUrl = " + imageUrl);
-
         }
         User user = dtoToEntity(userDTO, imageUrl);
         userRepository.save(user);

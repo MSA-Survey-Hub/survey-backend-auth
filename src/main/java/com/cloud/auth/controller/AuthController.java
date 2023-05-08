@@ -38,6 +38,7 @@ public class AuthController {
             UserDTO userDTO = authService.createUser(userDto);
             userService.registerUser(userDTO);
         } catch (Exception e) {
+            System.out.printf("authService.createUser error message: %s \n",e.getMessage());
             log.error(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -60,14 +60,17 @@ public class AuthService {
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
         user.setUsername(userDto.getUserId());
+        user.setEmail(userDto.getMailAddr());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
 
         // Get realm
         RealmResource realmResource = keycloak.realm(realm);
         UsersResource usersResource = realmResource.users();
 
         Response response = usersResource.create(user);
+        System.out.printf("Response from realm CreateUser method %s", response.getStatus());
         if(response.getStatus() == 201) {
-
             String userId = CreatedResponseUtil.getCreatedId(response);
 
             // create password credential
@@ -76,6 +79,7 @@ public class AuthService {
             passwordCred.setType(CredentialRepresentation.PASSWORD);
             passwordCred.setValue(userDto.getUserPwd());
             log.info("Created userId {}", userId);
+            System.out.println(userId);
             UserResource userResource = usersResource.get(userId);
 
             // Set password credential
@@ -85,7 +89,6 @@ public class AuthService {
             ClientRepresentation clientRep = realmResource.clients().findByClientId(clientId).get(0);
             RoleRepresentation clientRoleRep = realmResource.clients().get(clientRep.getId()).roles().get(userDto.getUserRole().getCode()).toRepresentation();
             userResource.roles().clientLevel(clientRep.getId()).add(Arrays.asList(clientRoleRep));
-
         }
 
         userDto.setStatus(response.getStatus());
