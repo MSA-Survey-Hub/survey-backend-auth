@@ -89,7 +89,8 @@ public class GroupServiceImpl implements GroupService {
     public PatchGroupRes deleteGroup(Integer groupId) {
         Group group = groupRepository.findByGroupId(groupId)
                 .orElseThrow(() -> new BaseException(NOT_EXIST_GROUP));
-        group.deleteGroup(groupId);
+        group.deleteGroup();
+        groupRepository.save(group);
         return PatchGroupRes.toDto(group);
     }
 
@@ -116,7 +117,7 @@ public class GroupServiceImpl implements GroupService {
     // 그룹 상세 조회
     @Override
     public GroupDTO getOneGroupDetail(Integer groupId) {
-        Group group = groupRepository.findByGroupId(groupId);
+        Group group = groupRepository.findByGroupId(groupId).orElseThrow(()->new BaseException(NOT_EXIST_GROUP));
         List<User> userList = userGroupRepository.userList(groupId);
         String isParticipated = null;
         String isCreated = null;
