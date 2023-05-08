@@ -11,11 +11,12 @@ import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Integer> {
 
     // 그룹 상세 정보 조회
-    Group findByGroupId(Integer groupId);
+    Optional<Group> findByGroupId(Integer groupId);
 
     // 존재하는 모든 그룹 정보 조회
     @Query("select g from Group g where g.delYn='N'")

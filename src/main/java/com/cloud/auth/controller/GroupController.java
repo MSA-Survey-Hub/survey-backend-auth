@@ -1,6 +1,8 @@
 package com.cloud.auth.controller;
 
+import com.cloud.auth.config.response.BaseResponse;
 import com.cloud.auth.dto.*;
+import com.cloud.auth.dto.group.PatchGroupRes;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.service.GroupService;
 import com.cloud.auth.service.UserGroupService;
@@ -50,18 +52,25 @@ public class GroupController {
 
 
     // 그룹 삭제
-    @PostMapping("/delete")
-    public ResponseEntity<String> delGroup(@RequestParam(value = "groupId") Integer groupId) {
-        Integer deleteGroup = groupService.deleteGroup(groupId);
+//    @PostMapping("/delete")
+//    public ResponseEntity<String> delGroup(@RequestParam(value = "groupId") Integer groupId) {
+//        Integer deleteGroup = groupService.deleteGroup(groupId);
+//
+//
+//        if(deleteGroup == 1) {
+//            return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
+//        }
+//
+//        else {
+//            return new ResponseEntity<>("삭제 불가", HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
+    @PatchMapping("/delete")
+    public BaseResponse<PatchGroupRes> delGroup(@RequestParam("groupId") Integer groupId){
+        PatchGroupRes patchGroupRes = groupService.deleteGroup(groupId);
 
-        if(deleteGroup == 1) {
-            return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
-        }
-
-        else {
-            return new ResponseEntity<>("삭제 불가", HttpStatus.BAD_REQUEST);
-        }
+        return new BaseResponse<>(patchGroupRes);
     }
 
     // 그룹 생성

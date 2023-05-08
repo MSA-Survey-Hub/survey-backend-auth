@@ -66,4 +66,6 @@ public class Group {
 
     @Column(name = "group_image_url")
     private String groupImageUrl;
+
+    public void deleteGroup(Integer groupId){ this.delYn = DelYn.Y;};
 }

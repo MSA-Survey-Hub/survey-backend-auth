@@ -2,6 +2,7 @@ package com.cloud.auth.service;
 import com.cloud.auth.dto.GroupDTO;
 import com.cloud.auth.dto.PageRequestDTO;
 import com.cloud.auth.dto.PageResultDTO;
+import com.cloud.auth.dto.group.PatchGroupRes;
 import com.cloud.auth.entity.DelYn;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.entity.User;
@@ -55,7 +56,7 @@ public interface GroupService {
     List<GroupDTO> getAllGroupList(String userId);
 
     // 그룹 삭제
-    Integer deleteGroup(Integer groupId);
+    PatchGroupRes deleteGroup(Integer groupId);
 
     // 그룹 생성
     Integer insertGroup(GroupDTO groupDTO) throws IOException;

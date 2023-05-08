@@ -1,9 +1,11 @@
 package com.cloud.auth.service;
 
+import com.cloud.auth.config.exception.BaseException;
 import com.cloud.auth.dto.FileDTO;
 import com.cloud.auth.dto.GroupDTO;
 import com.cloud.auth.dto.PageRequestDTO;
 import com.cloud.auth.dto.PageResultDTO;
+import com.cloud.auth.dto.group.PatchGroupRes;
 import com.cloud.auth.entity.DelYn;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.entity.User;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+
+import static com.cloud.auth.config.response.BaseResponseStatus.NOT_EXIST_GROUP;
 
 @Service
 @RequiredArgsConstructor
@@ -82,16 +86,11 @@ public class GroupServiceImpl implements GroupService {
 
     // 그룹 삭제
     @Override
-    public Integer deleteGroup(Integer groupId) {
-        // 값이 없으면 delete, return 1
-        if (userGroupRepository.userList(groupId).isEmpty()) {
-            groupRepository.updateGroupDelY(groupId);
-            return 1;
-        }
-        // 값이 있으면 return 0
-        else {
-            return 0;
-        }
+    public PatchGroupRes deleteGroup(Integer groupId) {
+        Group group = groupRepository.findByGroupId(groupId)
+                .orElseThrow(() -> new BaseException(NOT_EXIST_GROUP));
+        group.deleteGroup(groupId);
+        return PatchGroupRes.toDto(group);
     }
 
     // 그룹 생성
