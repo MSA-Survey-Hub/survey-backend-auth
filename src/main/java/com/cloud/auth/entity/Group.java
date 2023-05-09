@@ -74,5 +74,8 @@ public class Group {
     public void modGroup(PatchGroupReq req){
         this.groupName = req.getGroupName();
         this.groupDescription = req.getGroupDescription();
+
+        Integer groupCnt = req.getGroupCnt() + req.getNewGroupUserList().size() - req.getDeleteGroupUserList().size();
+        this.groupCnt = groupCnt;
     }
 }

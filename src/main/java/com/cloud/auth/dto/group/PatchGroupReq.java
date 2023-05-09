@@ -14,6 +14,7 @@ public class PatchGroupReq {
     private Integer groupId;
     private String groupName;
     private String groupDescription;
+    private Integer groupCnt;
     private List<String> newGroupUserList;
     private List<String> deleteGroupUserList;
 }

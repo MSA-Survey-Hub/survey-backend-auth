@@ -147,6 +147,7 @@ public class GroupServiceImpl implements GroupService {
     public PatchGroupRes modifyGroup(PatchGroupReq req){
         Group group = groupRepository.findByGroupId(req.getGroupId())
                 .orElseThrow(()-> new BaseException(NOT_EXIST_GROUP));
+
         // 그룹 정보 수정
         group.modGroup(req);
 
@@ -158,6 +159,7 @@ public class GroupServiceImpl implements GroupService {
                     .user(user)
                     .build();
             userGroupRepository.save(userGroup);
+
         });
 
         // 그룹에서 인원 제거
