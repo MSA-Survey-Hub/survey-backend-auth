@@ -11,6 +11,7 @@ import com.cloud.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -25,7 +26,8 @@ public class UserGroupServiceImpl implements UserGroupService{
     // 그룹 참여(user-group table에 값 추가)
     @Override
     public void participateGroup(String userId, Integer groupId) {
-        Group group = groupRepository.findByGroupId(groupId).orElseThrow(()-> new BaseException(BaseResponseStatus.NOT_EXIST_GROUP));
+        Group group = groupRepository.findByGroupId(groupId)
+                .orElseThrow(()-> new BaseException(BaseResponseStatus.NOT_EXIST_GROUP));
 
         UserGroup userGroup = UserGroup.builder()
                         .group(group)
@@ -35,6 +37,15 @@ public class UserGroupServiceImpl implements UserGroupService{
 
         // 사용자가 해당 그룹에 참여시 그룹 참여자 수 +1
         groupRepository.updateGroupCnt(groupId);
+    }
+
+    @Override
+    @Transactional
+    public void unparticipateGroup(String userId, Integer groupId){
+        Group group = groupRepository.findByGroupId(groupId)
+                .orElseThrow(()->new BaseException(BaseResponseStatus.NOT_EXIST_GROUP));
+        User user = userRepository.findByUserId(userId);
+        userGroupRepository.deleteByGroupAndUser(group,user);
     }
 
     // 그룹 참여자 여부 조회 -> for groupDetail 조회 권한

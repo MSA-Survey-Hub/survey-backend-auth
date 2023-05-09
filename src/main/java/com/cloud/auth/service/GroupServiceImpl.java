@@ -41,6 +41,8 @@ public class GroupServiceImpl implements GroupService {
     private final UserRepository userRepository;
     private final CommonServiceClient commonServiceClient;
 
+    private final UserGroupService userGroupService;
+
     @Autowired
     private final ModelMapper mapper;
 
@@ -160,7 +162,7 @@ public class GroupServiceImpl implements GroupService {
 
         // 그룹에서 인원 제거
         req.getDeleteGroupUserList().forEach((GroupUser)->{
-            // 그룹에서 인원 제거하는 API
+            userGroupService.unparticipateGroup(GroupUser,group.getGroupId());
         });
 
         groupRepository.save(group);

@@ -13,6 +13,7 @@ public enum BaseResponseStatus {
      * 2000 : Request 오류
      */
     NOT_EXIST_GROUP(false, 2000, "존재하지 않는 그룹입니다."),
+    NOT_EXIST_USER_GROUP(false, 2001,"유저가 그룹에 포함 되어있지 않습니다."),
 
     /**
      * 3000 : Response 오류
