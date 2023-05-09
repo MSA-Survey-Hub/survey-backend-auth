@@ -1,5 +1,8 @@
 package com.cloud.auth.service;
 
+import com.cloud.auth.config.exception.BaseException;
+import com.cloud.auth.config.response.BaseResponseStatus;
+import com.cloud.auth.entity.Group;
 import com.cloud.auth.entity.User;
 import com.cloud.auth.entity.UserGroup;
 import com.cloud.auth.repository.GroupRepository;
@@ -22,8 +25,10 @@ public class UserGroupServiceImpl implements UserGroupService{
     // 그룹 참여(user-group table에 값 추가)
     @Override
     public void participateGroup(String userId, Integer groupId) {
+        Group group = groupRepository.findByGroupId(groupId).orElseThrow(()-> new BaseException(BaseResponseStatus.NOT_EXIST_GROUP));
+
         UserGroup userGroup = UserGroup.builder()
-                        .group(groupRepository.findById(groupId).orElse(null))
+                        .group(group)
                         .user(userRepository.findByUserId(userId))
                         .build();
         userGroupRepository.save(userGroup);

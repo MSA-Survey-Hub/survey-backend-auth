@@ -1,5 +1,6 @@
 package com.cloud.auth.entity;
 
+import com.cloud.auth.dto.group.PatchGroupReq;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,4 +71,8 @@ public class Group {
     public void deleteGroup(){
         this.delYn = DelYn.Y;
     };
+    public void modGroup(PatchGroupReq req){
+        this.groupName = req.getGroupName();
+        this.groupDescription = req.getGroupDescription();
+    }
 }

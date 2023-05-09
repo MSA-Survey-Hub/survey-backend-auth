@@ -5,14 +5,17 @@ import com.cloud.auth.dto.FileDTO;
 import com.cloud.auth.dto.GroupDTO;
 import com.cloud.auth.dto.PageRequestDTO;
 import com.cloud.auth.dto.PageResultDTO;
+import com.cloud.auth.dto.group.PatchGroupReq;
 import com.cloud.auth.dto.group.PatchGroupRes;
 import com.cloud.auth.entity.DelYn;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.entity.User;
+import com.cloud.auth.entity.UserGroup;
 import com.cloud.auth.openfeign.CommonServiceClient;
 import com.cloud.auth.repository.GroupRepository;
 import com.cloud.auth.repository.UserGroupRepository;
 import com.cloud.auth.repository.UserRepository;
+import com.sun.xml.bind.v2.TODO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +113,7 @@ public class GroupServiceImpl implements GroupService {
         User user = userRepository.findByUserId(groupDTO.getRegId());
         Group group = dtoToEntity(groupDTO);
         Group save = groupRepository.save(group);
-        return save.getGroupId();
+        return group.getGroupId();
     }
 
 
@@ -136,5 +139,32 @@ public class GroupServiceImpl implements GroupService {
     public Group findByGroupName(String groupName) {
         Group group = groupRepository.findByGroupName(groupName);
         return group;
+    }
+
+    @Override
+    public PatchGroupRes modifyGroup(PatchGroupReq req){
+        Group group = groupRepository.findByGroupId(req.getGroupId())
+                .orElseThrow(()-> new BaseException(NOT_EXIST_GROUP));
+        // 그룹 정보 수정
+        group.modGroup(req);
+
+        // 그룹 속한 인원 추가
+        req.getNewGroupUserList().forEach((GroupUser)->{
+            User user = userRepository.findByUserId(GroupUser);
+            UserGroup userGroup = UserGroup.builder()
+                    .group(group)
+                    .user(user)
+                    .build();
+            userGroupRepository.save(userGroup);
+        });
+
+        // 그룹에서 인원 제거
+        req.getDeleteGroupUserList().forEach((GroupUser)->{
+            // 그룹에서 인원 제거하는 API
+        });
+
+        groupRepository.save(group);
+
+        return PatchGroupRes.toDto(group);
     }
 }

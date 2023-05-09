@@ -2,10 +2,12 @@ package com.cloud.auth.controller;
 
 import com.cloud.auth.config.response.BaseResponse;
 import com.cloud.auth.dto.*;
+import com.cloud.auth.dto.group.PatchGroupReq;
 import com.cloud.auth.dto.group.PatchGroupRes;
 import com.cloud.auth.entity.Group;
 import com.cloud.auth.service.GroupService;
 import com.cloud.auth.service.UserGroupService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="v1/group")
@@ -39,7 +42,6 @@ public class GroupController {
         return new ResponseEntity<>(groupList, HttpStatus.OK);
     }
 
-
     @GetMapping("/allList")
     public ResponseEntity<List<GroupDTO>> getAllGroupList(Principal principal) {
         JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
@@ -49,22 +51,6 @@ public class GroupController {
 
         return new ResponseEntity<>(groupList, HttpStatus.OK);
     }
-
-
-    // 그룹 삭제
-//    @PostMapping("/delete")
-//    public ResponseEntity<String> delGroup(@RequestParam(value = "groupId") Integer groupId) {
-//        Integer deleteGroup = groupService.deleteGroup(groupId);
-//
-//
-//        if(deleteGroup == 1) {
-//            return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
-//        }
-//
-//        else {
-//            return new ResponseEntity<>("삭제 불가", HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
     @PatchMapping("/delete")
     public BaseResponse<PatchGroupRes> delGroup(@RequestParam("groupId") Integer groupId){
@@ -76,9 +62,9 @@ public class GroupController {
     // 그룹 생성
     @PostMapping("/reg")
     public ResponseEntity<String> regGroup(GroupDTO groupDTO) throws IOException {
+        System.out.println(groupDTO);
         try {
             System.out.print(groupDTO);
-            // 그룹 등록하기
             Integer groupId = groupService.insertGroup(groupDTO);
 
             // 그룹 참여자 목록 등록하기(그룹 생성자)
@@ -86,7 +72,7 @@ public class GroupController {
 
             // 그룹 참여자 목록 등록하기(그룹 참여자)
             groupDTO.getGroupUserList().forEach((userId) -> {
-                System.out.printf("userId: %s",userId);
+                System.out.printf("\n userId: %s",userId);
                 userGroupService.participateGroup(userId, groupId);
             });
             return new ResponseEntity<>("그룹 생성에 성공했습니다", HttpStatus.CREATED);
@@ -94,7 +80,19 @@ public class GroupController {
             log.error(e.getMessage());
             return new ResponseEntity<>("그룹 생성에 실패했습니다", HttpStatus.BAD_REQUEST);
         }
+    }
 
+    // 그룹 수정
+    @PatchMapping("/mod")
+    public PatchGroupRes modGroup(PatchGroupReq patchGroupReq){
+        System.out.printf("\n 그룹 아이디: %s",patchGroupReq.getGroupId());
+        System.out.printf("\n 그룹 이름: %s",patchGroupReq.getGroupName());
+        System.out.printf("\n 그룹 설명: %s",patchGroupReq.getGroupDescription());
+        System.out.printf("\n 그룹에 추가한 사람: %s",patchGroupReq.getNewGroupUserList());
+        System.out.printf("\n 그룹으로부터 제거한 사람: %s", patchGroupReq.getDeleteGroupUserList());
+
+        PatchGroupRes patchGroupRes = groupService.modifyGroup(patchGroupReq);
+        return patchGroupRes;
     }
 
     // 그룹 참여(user-group table에 값 추가)

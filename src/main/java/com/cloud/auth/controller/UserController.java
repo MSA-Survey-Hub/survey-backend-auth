@@ -36,7 +36,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserDetailInfoList(list), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/allUserList", method = RequestMethod.GET)
+    @GetMapping("/allUserList")
     public ResponseEntity<List<UserDTO>> getAllUserList(@RequestParam(value = "type") String type, @RequestParam(value = "keyword") String keyword) {
         return new ResponseEntity<>(userService.getAllUserList(type, keyword), HttpStatus.CREATED);
     }
