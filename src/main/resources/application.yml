@@ -6,7 +6,7 @@ spring:
     name: auth-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://mysql:3306/user_db
+    url: jdbc:mariadb://mysql/user_db
     username: root
     password: root
   jpa:
@@ -16,13 +16,13 @@ spring:
     show-sql: false
   kafka:
     consumer:
-      bootstrap-servers: kafka:9092
+      bootstrap-servers: 192.168.49.2:9092
       group-id: survey_platform
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      bootstrap-servers: kafka:9092
+      bootstrap-servers: 192.168.49.2:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   security:
